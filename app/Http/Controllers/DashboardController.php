@@ -12,7 +12,7 @@ use App\Http\Requests;
 
 class DashboardController extends Controller
 {
-    public function showLanding(){
+    public function show(){
 
         return view('pages.landing');
     }
