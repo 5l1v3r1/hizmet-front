@@ -155,6 +155,7 @@
                                         <input name="name" type="text" class="form-control" id="name" placeholder="Your Name" />
                                     </div>
                                     <!--end form-group-->
+
                                     <div class="form-group">
                                         <label for="message" class="col-form-label">Mesaj</label>
                                         <textarea name="message" id="message" class="form-control" rows="4" placeholder="Hi there! I am interested in your offer ID 53951. Please give me more details."></textarea>
