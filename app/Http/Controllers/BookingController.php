@@ -154,6 +154,17 @@ class BookingController extends Controller
             ->get();
         return view('pages.client.tamamlanan_ilanlar', ['ads_data' => $ads_data]);
     }
+    public function islemde()
+    {    $offer_data = DB::table('booking_offers')
+        ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices','clients.id as cid')
+        ->Join('booking','booking.id','booking_offers.booking_id')
+        ->Join('clients','clients.id','booking_offers.assigned_id')
+        ->Join('services','services.id','booking.service_id')
+        ->where('booking_offers.client_id', Auth::user()->id)
+        ->where('booking_offers.status', 4)
+        ->get();
+        return view('pages.client.islemdeki_ilanlar', ['offer_data' => $offer_data]);
+    }
 
     public function showDetail(Request $request, $id = 0)
     {
@@ -165,7 +176,15 @@ class BookingController extends Controller
             ->where('booking.status', '<>', 0)
             ->first();
 
-        return view('pages.booking.ads_detail', ['ads_data' => $ads_data]);
+        $client_id = DB::table('booking')
+            ->where('booking.id', $id)
+            ->first();
+
+        $rate= DB::table('comment')
+            ->where('c_id', $client_id->client_id)
+            ->avg('point');
+
+        return view('pages.booking.ads_detail', ['ads_data' => $ads_data, 'rate' => $rate]);
     }
     public function offer(Request $request){
         $assigned_id = Auth::user()->id;

@@ -103,10 +103,9 @@
                                         </div>
                                         <!--end author-image-->
                                         <div class="author-description">
-                                            <h3>{{$ads_data->cname}}</h3>
-                                            <div class="rating" data-rating="4"></div>
-                                            <a href="../uye-profil/{{$ads_data->client_id}}" class="text-uppercase">Önceki siparişleri
-                                                <span class="appendix">(12)</span>
+                                            <a href="../musteri-profil/{{$ads_data->client_id}}" class="text-uppercase"><h3>{{$ads_data->cname}}</h3> </a>
+                                            <div class="rating" data-rating="{{$rate}}"></div>
+                                            <a href="../musteri-profil/{{$ads_data->client_id}}" class="text-uppercase">Önceki siparişleri
                                             </a>
                                         </div>
                                         <!--end author-description-->
@@ -126,7 +125,7 @@
                                         <input type="hidden" name="client_id" value="{{$ads_data->client_id}}">
                                     <div class="form-group">
                                         <label for="message" class="col-form-label">Mesaj</label>
-                                        <textarea name="message" id="message" class="form-control" rows="4" placeholder="Hi there! I am interested in your offer ID 53951. Please give me more details."></textarea>
+                                        <textarea name="message" id="message" class="form-control" rows="4" placeholder="Teklifinizle ilgili detayları buraya yazınız."></textarea>
                                     </div>
                                     <!--end form-group-->
                                     <button type="submit" class="btn btn-primary">Teklif Ver</button>

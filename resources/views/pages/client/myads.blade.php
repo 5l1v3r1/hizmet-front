@@ -37,6 +37,9 @@
                                 <a class="nav-link icon" href="./teklifler">
                                     <i class="fa fa-star"></i>Teklifler
                                 </a>
+                                <a class="nav-link icon" href="./islemdeki-ilanlarim">
+                                    <i class="fa fa-recycle"></i>İşlemdeki İlanlarım
+                                </a>
                                 <a class="nav-link icon" href="./tamamlanan-ilanlarim">
                                     <i class="fa fa-recycle"></i>Tamamlanan İlanlarım
                                 </a>
@@ -54,6 +57,9 @@
                                 <a class="nav-link icon" href="./onaylanan-teklifler">
                                     <i class="fa fa-star"></i> Onaylanan Teklifler
                                 </a>
+                                    <a class="nav-link icon" href="./tamamlanan-teklifler">
+                                        <i class="fa fa-star"></i>Tammalanan Teklifler
+                                    </a>
                                 <a class="nav-link icon" href="./sifre-degistir">
                                     <i class="fa fa-recycle"></i>Şifre Değiştir
                                 </a>

@@ -34,13 +34,19 @@ Route::group([], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home','DashboardController@showHome');
     Route::get('/profil','RegisterController@profile');
+    Route::get('/satici-profil/{id}','RegisterController@sellerProfile');
+    Route::get('/musteri-profil/{id}','RegisterController@clientProfile');
+    Route::post('/client-yorum-yaz','RegisterController@clientYorumYaz');
     Route::get('/teklifler','RegisterController@showTeklifler');
     Route::get('/verilen-teklifler','RegisterController@showVerilenTeklifler');
     Route::get('/onaylanan-teklifler','RegisterController@showOnaylananTeklifler');
+    Route::get('/tamamlanan-teklifler','RegisterController@showTamamlananTeklifler');
     Route::get('/sifre-degistir','RegisterController@changePasswordshow');
     Route::post('/sifre-degistir','RegisterController@changePassword');
     Route::post('/profil-duzenle','RegisterController@changeProfile');
     Route::get('/teklif-onay/{id}','RegisterController@onay');
+    Route::get('/teklif-istamamla/{id}','RegisterController@istamamla');
+    Route::get('/teklif-kotu/{id}','RegisterController@kotu');
     Route::get('/teklif-red/{id}','RegisterController@red');
     Route::get('/teklif-geri-al/{id}','RegisterController@geri');
     Route::get('/teklif-tamamla/{id}','RegisterController@tamamla');
@@ -56,6 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ilan-sil/{id}','BookingController@delete');
     Route::get('/ilan-gizle/{id}/{op}','BookingController@hidden');
     Route::get('/ilanlarim','BookingController@showMyAds');
+    Route::get('/islemdeki-ilanlarim','BookingController@islemde');
     Route::get('/tamamlanan-ilanlarim','BookingController@tamamlanan');
     Route::get('/ilan/{id}','BookingController@showDetail');
     Route::post('/teklif-ver','BookingController@offer');

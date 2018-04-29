@@ -171,13 +171,13 @@ class RegisterController extends Controller
 
     public function showTeklifler()
     {    $offer_data = DB::table('booking_offers')
-        ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices')
+        ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices','clients.id as cid')
         ->Join('booking','booking.id','booking_offers.booking_id')
         ->Join('clients','clients.id','booking_offers.assigned_id')
         ->Join('services','services.id','booking.service_id')
         ->where('booking_offers.client_id', Auth::user()->id)
         ->where('booking_offers.status','<>', 0)
-        ->where('booking_offers.status','<>', 3)
+        ->whereIn('booking_offers.status', [1, 2])
         ->get();
         return view('pages.client.teklifler', ['offer_data' => $offer_data]);
     }
@@ -206,6 +206,18 @@ class RegisterController extends Controller
             ->where('booking_offers.status', 2)
             ->get();
         return view('pages.seller.onaylanan_teklifler', ['offer_data' => $offer_data]);
+    }
+    public function showTamamlananTeklifler()
+    {
+        $offer_data = DB::table('booking_offers')
+            ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices','clients.id as cid')
+            ->Join('booking','booking.id','booking_offers.booking_id')
+            ->Join('clients','clients.id','booking_offers.assigned_id')
+            ->Join('services','services.id','booking.service_id')
+            ->where('booking_offers.assigned_id', Auth::user()->id)
+            ->where('booking_offers.status', 5)
+            ->get();
+        return view('pages.seller.tamamlanan_teklifler', ['offer_data' => $offer_data]);
     }
 
     public function changePasswordshow()
@@ -297,6 +309,65 @@ class RegisterController extends Controller
                     ->update(
                         [
                             'assigned_id' =>Auth::user()->id,
+                            'status'=>2,
+
+                        ]
+                    );
+
+
+
+        return redirect()->back();
+    }
+    public function istamamla(Request $request, $id = 0)
+    {
+
+
+            DB::table('booking_offers')
+                ->where('id', $id)
+                ->update(
+                    [
+                        'status' =>5,
+
+                    ]
+                );
+            $bo= DB::table("booking_offers")
+                    ->where('id',$id)
+                    ->first();
+                DB::table('booking')
+                    ->where('id', $bo->booking_id)
+                    ->update(
+                        [
+                            'assigned_id' =>Auth::user()->id,
+                            'status'=>5,
+
+                        ]
+                    );
+
+
+
+        return redirect()->to('/satici-profil/'.$bo->assigned_id);
+    }
+  public function kotu(Request $request, $id = 0)
+    {
+
+
+            DB::table('booking_offers')
+                ->where('id', $id)
+                ->update(
+                    [
+                        'status' =>3,
+
+                    ]
+                );
+            $bo= DB::table("booking_offers")
+                    ->where('id',$id)
+                    ->first();
+                DB::table('booking')
+                    ->where('id', $bo->booking_id)
+                    ->update(
+                        [
+                            'assigned_id' =>Auth::user()->id,
+                            'status'=>3,
 
                         ]
                     );
@@ -325,6 +396,7 @@ class RegisterController extends Controller
             ->update(
                 [
                     'assigned_id' =>0,
+                    'status' =>1,
 
                 ]
             );
@@ -342,6 +414,18 @@ class RegisterController extends Controller
 
                 ]
             );
+        $bo= DB::table("booking_offers")
+            ->where('id',$id)
+            ->first();
+        DB::table('booking')
+            ->where('id', $bo->booking_id)
+            ->update(
+                [
+                    'assigned_id' =>0,
+                    'status' =>1,
+
+                ]
+            );
 
         return redirect()->back();
     }
@@ -352,10 +436,56 @@ class RegisterController extends Controller
             ->where('id', $id)
             ->update(
                 [
-                    'status' =>5,
+                    'status' =>4,
 
                 ]
             );
+
+        return redirect()->back();
+    }
+    public function clientProfile($id=0){
+        $profile_data = DB::table('clients')
+            ->where('id', $id)
+            ->where('status', '<>', 0)
+            ->first();
+        $rate= DB::table('comment')
+            ->where('c_id', $id)
+            ->avg('point');
+        $comment_data = DB::table('comment')
+            ->select('comment.*','clients.name as name')
+            ->join('clients','clients.id','comment.created_by' )
+            ->where('c_id', $id)
+            ->get();
+
+        return view('pages.client.show_profile', ['profile_data' => $profile_data,'rate' => $rate, 'comment_data' => json_encode($comment_data),]);
+    }
+    public function sellerProfile($id=0){
+        $profile_data = DB::table('clients')
+            ->where('id', $id)
+            ->where('status', '<>', 0)
+            ->first();
+        $rate= DB::table('comment')
+            ->where('c_id', $id)
+            ->avg('point');
+        $comment_data = DB::table('comment')
+            ->select('comment.*','clients.name as name')
+            ->join('clients','clients.id','comment.created_by' )
+            ->where('c_id', $id)
+            ->get();
+
+        return view('pages.seller.show_profile', ['profile_data' => $profile_data,'rate' => $rate, 'comment_data' => json_encode($comment_data),]);
+    }
+    public function clientYorumYaz(Request $request){
+        DB::table('comment')->insert(
+            [
+                'c_id' => $request->input("client_id"),
+                'head' => $request->input("subject"),
+                'comment' => $request->input("review"),
+                'point' => $request->input("rating"),
+                'created_by' => Auth::user()->id,
+
+            ]
+        );
 
         return redirect()->back();
     }

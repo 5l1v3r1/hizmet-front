@@ -58,7 +58,7 @@
                             </div>
                             <!--end image-->
                             <h4 class="location">
-                                <a href="#">Başvuran kişi {{$one->bas_ilce}}, {{$one->bas_il}}</a>
+                                <a href="/satici-profil/{{$one->cid}}">Başvuran kişi {{$one->bas_ilce}}, {{$one->bas_il}}</a>
                             </h4>
                             <div class="price">{{$one->prices}} TL</div>
                             <div class="meta">
@@ -66,7 +66,7 @@
                                     <i class="fa fa-calendar-o"></i>{{$one->offer_date}}
                                 </figure>
                                 <figure>
-                                    <a href="#">
+                                    <a href="/satici-profil/{{$one->cid}}">
                                         <i class="fa fa-user"></i>{{$one->bas_name}}
                                     </a>
                                 </figure>

@@ -45,15 +45,15 @@
                                 <a class="nav-link icon " href="./profil">
                                     <i class="fa fa-user"></i>Profilim
                                 </a>
-                                <a class="nav-link icon active" href="./verilen-teklifler">
+                                <a class="nav-link icon" href="./verilen-teklifler">
                                     <i class="fa fa-heart"></i>Verilen Teklifler
                                 </a>
                                 <a class="nav-link icon" href="./onaylanan-teklifler">
                                     <i class="fa fa-star"></i>Onaylanan Teklifler
                                 </a>
-                                    <a class="nav-link icon" href="./tamamlanan-teklifler">
-                                        <i class="fa fa-star"></i>Tammalanan Teklifler
-                                    </a>
+                                <a class="nav-link icon active" href="./tamamlanan-teklifler">
+                                    <i class="fa fa-star"></i>Tammalanan Teklifler
+                                </a>
                                 <a class="nav-link icon" href="./sifre-degistir">
                                     <i class="fa fa-recycle"></i>Şifre Değiştir
                                 </a>
@@ -82,7 +82,7 @@
                         @foreach($offer_data as $one)
                             <div class="items list grid-xl-4-items grid-lg-3-items grid-md-2-items">
                                 <div class="item">
-                                    <div class="ribbon-featured">Henüz Onaylanmadı</div><br>
+                                    <div class="ribbon-featured">Tamamlandı</div><br>
                                     <!--end ribbon-->
                                     <div class="wrapper">
                                         <div class="image">
@@ -115,21 +115,22 @@
                                             <p>{{$one->note}}</p>
                                         </div>
                                         <!--end description-->
-
+                                        <a  class="detail text-caps underline" style="right: 12rem;">Tamamlandı</a>
+                                        <a href="/satici-profil/{{$one->cid}}"  class="detail text-caps underline" style="right: 0rem;">Puan/Yorum</a>
                                     </div>
                                 </div>
                             </div>
                     @endforeach
 
 
-                            <!--end item-->
+                    <!--end item-->
 
-                        </div>
-                        <!--end items-->
                     </div>
-                    <!--end col-md-9-->
+                    <!--end items-->
                 </div>
-                <!--end row-->
+                <!--end col-md-9-->
+            </div>
+            <!--end row-->
             </div>
             <!--end container-->
         </section>

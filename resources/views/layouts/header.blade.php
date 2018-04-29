@@ -26,12 +26,19 @@
                     @endif
 
                     @if( Auth::user()  )
+
+                            <li>
+                                <a class=" count-info" href="#">
+                                    <i class="fa fa-bell"></i> Bildirimler
+                                </a>
+                            </li>
                             <li>
                                 <a href="/profil">
                                     <i class="fa fa-pencil-square-o"></i>Profil
                                 </a>
                             </li>
                             <li>
+
 
                                 <a href="{{ url('/logout') }}"
                                    onclick="event.preventDefault();
@@ -56,7 +63,7 @@
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-light justify-content-between">
                     <a class="navbar-brand" href="/">
-                        <img src="./assets/img/logo.png" alt="" />
+                        <img src="http://hizmet.site/assets/img/logo.png" alt="" />
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -112,7 +119,7 @@
         <!--============ End Hero Form ======================================================================-->
         <div class="background">
             <div class="background-image">
-                <img src="./assets/img/hero-background-image-02.jpg" alt="" />
+                <img src="http://hizmet.site/assets/img/hero-background-image-02.jpg" alt="" />
             </div>
             <!--end background-image-->
         </div>

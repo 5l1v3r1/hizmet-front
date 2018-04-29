@@ -51,6 +51,9 @@
                                 <a class="nav-link icon active" href="./onaylanan-teklifler">
                                     <i class="fa fa-star"></i>Onaylanan Teklifler
                                 </a>
+                                    <a class="nav-link icon" href="./tamamlanan-teklifler">
+                                        <i class="fa fa-star"></i>Tammalanan Teklifler
+                                    </a>
                                 <a class="nav-link icon" href="./sifre-degistir">
                                     <i class="fa fa-recycle"></i>Şifre Değiştir
                                 </a>
