@@ -158,7 +158,7 @@ class BookingController extends Controller
     public function showDetail(Request $request, $id = 0)
     {
         $ads_data = DB::table('booking')
-            ->select('booking.*','clients.name as cname', 'booking.id as bid')
+            ->select('booking.*','clients.name as cname', 'booking.id as bid', 'clients.phone as phone','clients.email as email')
             ->Join('services','services.id','booking.service_id')
             ->Join('clients','clients.id','booking.client_id')
             ->where('booking.id', $id)

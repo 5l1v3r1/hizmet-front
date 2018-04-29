@@ -143,23 +143,25 @@
 
 
                                     <dl>
-                                        <dt>Phone</dt>
-                                        <dd>+90 532 555 22 22</dd>
+                                        <dt>Telefon</dt>
+                                        <dd>{{$ads_data->phone}}</dd>
                                         <dt>Email</dt>
-                                        <dd>hijane@example.com</dd>
+                                        <dd>{{$ads_data->email}}</dd>
                                     </dl>
                                     <!--end author-->
-                                    <form class="form email" />
+                                        <form method="POST" action="/mesaj-gonder" accept-charset="UTF-8" class="form-horizontal">
+                                            {{ csrf_field() }}
                                     <div class="form-group">
                                         <label for="name" class="col-form-label">İsim</label>
-                                        <input name="name" type="text" class="form-control" id="name" placeholder="Your Name" />
+                                        <input name="name" type="text" class="form-control" id="name" placeholder="İsminiz" value="{{Auth::user()->name}}" disabled="" />
                                     </div>
                                     <!--end form-group-->
 
                                     <div class="form-group">
                                         <label for="message" class="col-form-label">Mesaj</label>
-                                        <textarea name="message" id="message" class="form-control" rows="4" placeholder="Hi there! I am interested in your offer ID 53951. Please give me more details."></textarea>
+                                        <textarea name="message" id="message" class="form-control" rows="4" placeholder=" Hizmet verene mesajınız."></textarea>
                                     </div>
+                                            <input type="hidden" name="client_id" value="{{$ads_data->client_id}}">
                                     <!--end form-group-->
                                     <button type="submit" class="btn btn-primary">Gönder</button>
                                     </form>

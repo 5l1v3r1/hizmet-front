@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/tamamlanan-ilanlarim','BookingController@tamamlanan');
     Route::get('/ilan/{id}','BookingController@showDetail');
     Route::post('/teklif-ver','BookingController@offer');
+    Route::post('/mesaj-gonder','MessageController@sendMessage');
 
 });
 
