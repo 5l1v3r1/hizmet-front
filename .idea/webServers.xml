@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="fd88c637-920a-47b7-9312-90da4ff47bd6" name="enerji" url="http://188.166.21.179/enerji">
-        <fileTransfer host="188.166.21.179" port="22" rootFolder="/var/www/html/3f" accessType="SFTP">
+        <fileTransfer host="188.166.21.179" port="22" rootFolder="/var/www/html/front" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" showHiddenFiles="true" />
           </advancedOptions>

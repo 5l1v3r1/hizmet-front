@@ -874,6 +874,7 @@ class Helper
         return (substr($haystack, 0, $length) === $needle);
     }
 
+
     public static function endsWith($haystack, $needle)
     {
         $length = strlen($needle);

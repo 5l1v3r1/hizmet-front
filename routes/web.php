@@ -17,15 +17,49 @@ Auth::routes();
 Route::group([], function () {
     Route::get('/','DashboardController@show');
     Route::get('/hizmet-al','DashboardController@showHizmetal');
-    Route::get('/hizmet-ver','DashboardController@show');
+    Route::get('/siparis-tamamla','DashboardController@create');
+    Route::get('/hizmet-ver','DashboardController@showHizmetver');
+    Route::post('/siparis-tamamla','RegisterController@createClient');
+    Route::post('/hizmet-ver-kayit','RegisterController@createSeller');
+    Route::post('/abone-ol','RegisterController@createNews');
+
+
+    Route::get('/register', 'RegisterController@create');
+    Route::post('register', 'RegisterController@store');
+    Route::get('/logout', 'RegisterController@destroy');
 });
 
 
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/event_logs', 'EventlogsController@showTable')->middleware('custom_authorization:view_event_logs');
+    Route::get('/home','DashboardController@showHome');
+    Route::get('/profil','RegisterController@profile');
+    Route::get('/teklifler','RegisterController@showTeklifler');
+    Route::get('/verilen-teklifler','RegisterController@showVerilenTeklifler');
+    Route::get('/onaylanan-teklifler','RegisterController@showOnaylananTeklifler');
+    Route::get('/sifre-degistir','RegisterController@changePasswordshow');
+    Route::post('/sifre-degistir','RegisterController@changePassword');
+    Route::post('/profil-duzenle','RegisterController@changeProfile');
+    Route::get('/teklif-onay/{id}','RegisterController@onay');
+    Route::get('/teklif-red/{id}','RegisterController@red');
+    Route::get('/teklif-geri-al/{id}','RegisterController@geri');
+    Route::get('/teklif-tamamla/{id}','RegisterController@tamamla');
 
-    Route::get('/el_get_data/{type}/{id}', 'EventlogsController@getData')->middleware('custom_authorization:view_event_logs');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/ilan-olustur','BookingController@showCreate');
+    Route::post('/ilan-olustur','BookingController@create');
+    Route::get('/ilan-duzenle/{id}','BookingController@showEdit');
+    Route::post('/ilan-duzenle/{id}','BookingController@edit');
+    Route::get('/ilan-sil/{id}','BookingController@delete');
+    Route::get('/ilan-gizle/{id}/{op}','BookingController@hidden');
+    Route::get('/ilanlarim','BookingController@showMyAds');
+    Route::get('/tamamlanan-ilanlarim','BookingController@tamamlanan');
+    Route::get('/ilan/{id}','BookingController@showDetail');
+    Route::post('/teklif-ver','BookingController@offer');
+
 });
 
 

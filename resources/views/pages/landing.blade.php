@@ -39,8 +39,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="İster hizmet al, ister hizmet ver | hizmet.me" />
     <meta property="og:description" content="Hizmet.me, her bütçeye uygun hizmet alan ve hizmet veren portalı." />
-    <meta property="og:image" content="https://www.hizmet.me/images/facebook-anasayfa.jpg" />
-    <meta property="og:url" content="https://www.hizmet.me" />
+    <meta property="og:image" content="https://www.hizmet.site/images/facebook-anasayfa.jpg" />
+    <meta property="og:url" content="https://www.hizmet.site" />
     <meta property="og:site_name" content="" />
 
     <!-- Page level javascript -->
@@ -78,8 +78,16 @@
 
                         <div class="collapse navbar-collapse" id="anamenu">
                             <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/home">Anasayfa</a></li>
+                                @if( empty(Auth::user())  )
+                                    <li><a href="/register">Kayıt</a></li>
+                                    <li><a href="/login" >Giriş</a></li>
+                                @endif
 
-                                <li><a href="#" onclick="cokyakinda()">GİRİŞ</a></li>
+                                @if(!empty(Auth::user()))
+                                    <li><a href="/logout">Çıkış</a></li>
+
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -124,7 +132,7 @@
                         </p>
                     </div>
                     <div class="item">
-                        <h3>Hizmet.me'NİN AMACI</h3>
+                        <h3>Hizmet.guru'NİN AMACI</h3>
                         <p>
                             Her kesimden hizmet almak isteyen kişiler ile hizmet vermek isteyen kişileri ekonomik olarak buluşturmak. Hizmet almak ve hizmet vermek isteyen kişiler için müsait saat uyumsuzluğunu ortadan kaldırmak.
                         </p>
@@ -234,12 +242,48 @@
                 <strong><i>{{ trans('global.motto') }}...</i></strong>
             </div>
             <div>
-                <strong>Copyright</strong> Talha Kayalı Bitirme projesi. &copy; 2018
+
             </div>
         </div> <!-- .footer -->
     </div>
 </div>
 
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-sm-4">
+                <h3>HİZMETLERİMİZ</h3>
+                <ul class="footer-list">
+                    <li><a href="#">Ev Temizliği</a></li>
+                    <li><a href="#">Ofis Temizliği</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+                <h3>BİLGİ</h3>
+                <ul class="footer-list">
+                    <li><a href="#">Ev Temizliği</a></li>
+                    <li><a href="#">Ofis Temizliği</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <h3>BİZE KATILIN</h3>
+                <p>Bizden en güncel haberleri almak için bültenimize abone olun!</p>
+                <form method="POST" action="/abone-ol" accept-charset="UTF-8" class="form-horizontal">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i
+                                        class="fa fa-envelope fa-fw"></i></span>
+                            <input type="email" class="form-control" name="email" placeholder="E-Posta Adresinizi Yazınız"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-footer btn-block">Abone Ol</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</footer>
 <!-- Javascript Files ================================================== -->
 <!-- Mainly scripts -->
 <script type="text/javascript" src="/js/jquery.min.js"></script>

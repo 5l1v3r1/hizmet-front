@@ -1,82 +1,75 @@
-@extends('layouts.app')
+@extends('layouts.master')
+
+@section('title')
+    Üye Kayıt
+@endsection
+
+@section('page_level_css')
+
+@endsection
+
+@section('page_head')
+
+@endsection
+
+
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
+    <section class="content">
+        <section class="block">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8">
+                        <form class="form clearfix" />
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
+                            <label for="name" class="col-form-label required">Adınız</label>
+                            <input name="name" type="text" class="form-control" id="name" placeholder="Adınız" required="" />
                         </div>
-                    </form>
+                        <!--end form-group-->
+                        <div class="form-group">
+                            <label for="email" class="col-form-label required">Email</label>
+                            <input name="email" type="email" class="form-control" id="email" placeholder="Eposta adresiniz" required="" />
+                        </div>
+                        <!--end form-group-->
+                        <div class="form-group">
+                            <label for="password" class="col-form-label required">Şifre</label>
+                            <input name="password" type="password" class="form-control" id="password" placeholder="Şifre" required="" />
+                        </div>
+                        <!--end form-group-->
+                        <div class="form-group">
+                            <label for="repeat_password" class="col-form-label required">Şifrenizi tekrar giriniz</label>
+                            <input name="repeat_password" type="password" class="form-control" id="repeat_password" placeholder="Şifre" required="" />
+                        </div>
+                        <!--end form-group-->
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <label>
+                                <input type="checkbox" name="newsletter" value="1" />
+                                Bültene kayıt ol
+                            </label>
+                            <button type="submit" class="btn btn-primary">Kayıt</button>
+                        </div>
+                        </form>
+                        <hr />
+                        <p>
+                            Kayıt butonuna basarak <a href="#" class="link">Kullanıcı Sözleşmesini.</a> kabul etmiş sayılırsınız.
+                        </p>
+                    </div>
+                    <!--end col-md-6-->
                 </div>
+                <!--end row-->
             </div>
-        </div>
-    </div>
-</div>
+            <!--end container-->
+        </section>
+        <!--end block-->
+    </section>
+    <!--end content-->
+@endsection
+
+@section('page_level_js')
+
+
+@endsection
+
+@section('page_document_ready')
+
 @endsection
