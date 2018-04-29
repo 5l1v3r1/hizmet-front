@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/teklif-geri-al/{id}','RegisterController@geri');
     Route::get('/teklif-tamamla/{id}','RegisterController@tamamla');
 
+
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -67,7 +68,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ilan/{id}','BookingController@showDetail');
     Route::post('/teklif-ver','BookingController@offer');
     Route::post('/mesaj-gonder','MessageController@sendMessage');
+    Route::get('/mesaj-kutusu','RegisterController@tamamla');
+});
 
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::post('/mesaj-gonder','MessageController@sendMessage');
+    Route::get('/messenger','MessageController@show');
+    Route::post('/getmessage','MessageController@getMessage');
 });
 
 

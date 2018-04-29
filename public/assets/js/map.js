@@ -1,7 +1,10 @@
+"use strict";
+
 var map, marker, markerContent, searchClicked;
 var optimizedDatabaseLoading = 0;
 
 function heroMap(_latitude,_longitude, element, mapDefaultZoom, mapAutoZoom){
+
     if( document.getElementById(element) !== null ){
 
         // Create google map first -------------------------------------------------------------------------------------
@@ -41,13 +44,13 @@ function heroMap(_latitude,_longitude, element, mapDefaultZoom, mapAutoZoom){
                     if( markerCluster !== undefined ){
                         markerCluster.clearMarkers();
                     }
-                    loadData("assets/php/data.php", ajaxData);
+                    loadData("assets/php/data.php", newMarkers, ajaxData);
                 }
             });
         }
         else {
             google.maps.event.addListenerOnce(map, 'idle', function(){
-                loadData("assets/php/data.php");
+                loadData("assets/php/data.php", newMarkers);
             });
         }
 
@@ -61,204 +64,7 @@ function heroMap(_latitude,_longitude, element, mapDefaultZoom, mapAutoZoom){
         var visibleMarkersOnMap = [];
         var markerCluster;
 
-        function placeMarkers(markers){
 
-            newMarkers = [];
-
-            for (i = 0; i < markers.length; i++) {
-
-                var marker;
-                var markerContent = document.createElement('div');
-                var thumbnailImage;
-
-                if( markers[i]["marker_image"] !== undefined ){
-                    thumbnailImage = markers[i]["marker_image"];
-                }
-                else {
-                    thumbnailImage = "assets/img/items/default.png";
-                }
-
-                markerContent.innerHTML =
-                    '<div class="marker" data-id="'+ markers[i]["id"] +'">' +
-                        '<img src="assets/img/map-marker.png" alt="">' +
-                    '</div>';
-
-                // Latitude, Longitude and Address
-
-                if ( markers[i]["latitude"] && markers[i]["longitude"] && markers[i]["address"] ){
-                    renderRichMarker(i,"latitudeLongitude");
-                }
-
-                // Only Address
-
-                else if ( markers[i]["address"] && !markers[i]["latitude"] && !markers[i]["longitude"] ){
-                    renderRichMarker(i,"address");
-                }
-
-                // Only Latitude and Longitude
-
-                else if ( markers[i]["latitude"] && markers[i]["longitude"] && !markers[i]["address"] ) {
-                    renderRichMarker(i,"latitudeLongitude");
-                }
-
-                // No coordinates
-
-                else {
-                    console.log( "No location coordinates");
-                }
-            }
-
-            // Create marker using RichMarker plugin -------------------------------------------------------------------
-
-            function renderRichMarker(i,method){
-                if( method === "latitudeLongitude" ){
-                    marker = new RichMarker({
-                        position: new google.maps.LatLng( markers[i]["latitude"], markers[i]["longitude"] ),
-                        map: map,
-                        draggable: false,
-                        content: markerContent,
-                        flat: true
-                    });
-
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                            openInfobox( $(this.content.firstChild).attr("data-id"), this, i );
-                            //console.log( $(this.content.firstChild).attr("data-id") );
-                        }
-                    })(marker, i));
-                    newMarkers.push(marker);
-
-                }
-                else if ( method === "address" ){
-                    a = i;
-                    var geocoder = new google.maps.Geocoder();
-                    var geoOptions = {
-                        address: markers[i]["address"]
-                    };
-                    geocoder.geocode(geoOptions, geocodeCallback(markerContent));
-
-                }
-
-                if ( mapAutoZoom === 1 ){
-                    var bounds  = new google.maps.LatLngBounds();
-                    for (var i = 0; i < newMarkers.length; i++ ) {
-                        bounds.extend(newMarkers[i].getPosition());
-                    }
-                    map.fitBounds(bounds);
-                }
-
-            }
-
-            // Ajax loading of infobox -------------------------------------------------------------------------------------
-
-            var lastInfobox;
-
-            function openInfobox(id, _this, i){
-                $.ajax({
-                    url: "assets/php/infobox.php",
-                    dataType: "html",
-                    data: { id: id },
-                    method: "POST",
-                    success: function(results){
-                        infoboxOptions = {
-                            content: results,
-                            disableAutoPan: false,
-                            pixelOffset: new google.maps.Size(-125, -30),
-                            zIndex: null,
-                            alignBottom: true,
-                            boxClass: "infobox-wrapper",
-                            enableEventPropagation: true,
-                            closeBoxMargin: "0px 0px -8px 0px",
-                            closeBoxURL: "assets/img/close-btn.png",
-                            infoBoxClearance: new google.maps.Size(1, 1)
-                        };
-
-                        if( lastInfobox !== undefined ){
-                            lastInfobox.close();
-                        }
-
-                        newMarkers[i].infobox = new InfoBox(infoboxOptions);
-                        newMarkers[i].infobox.open(map, _this);
-                        lastInfobox = newMarkers[i].infobox;
-
-                        setTimeout(function(){
-                            $(".item.infobox[data-id="+ id +"]").parent().addClass("show");
-                        }, 10);
-
-                        google.maps.event.addListener(newMarkers[i].infobox,'closeclick',function(){
-                            $(lastClickedMarker).removeClass("active");
-                        });
-                    },
-                    error : function () {
-                        console.log("error");
-                    }
-                });
-            }
-
-            // Geocoder callback ---------------------------------------------------------------------------------------
-
-            function geocodeCallback(markerContent) {
-                return function(results, status) {
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        marker = new RichMarker({
-                            position: results[0].geometry.location,
-                            map: map,
-                            draggable: false,
-                            content: markerContent,
-                            flat: true
-                        });
-                        newMarkers.push(marker);
-                        if ( mapAutoZoom === 1 ){
-                            var bounds  = new google.maps.LatLngBounds();
-                            for (var i = 0; i < newMarkers.length; i++ ) {
-                                bounds.extend(newMarkers[i].getPosition());
-                            }
-                            map.fitBounds(bounds);
-                        }
-                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                            return function() {
-                                openInfobox( $(this.content.firstChild).attr("data-id"), this, 0 );
-                            }
-                        })(marker, i));
-                    } else {
-                        console.log("Geocode failed " + status);
-                    }
-                }
-            }
-
-            // Marker clusters -----------------------------------------------------------------------------------------
-
-            var clusterStyles = [
-                {
-                    url: 'assets/img/cluster.png',
-                    height: 36,
-                    width: 36
-                }
-            ];
-
-            markerCluster = new MarkerClusterer(map, newMarkers, { styles: clusterStyles, maxZoom: 16, ignoreHidden: true });
-
-        }
-
-        function loadData(url, ajaxData){
-            $.ajax({
-                url: url,
-                dataType: "json",
-                method: "POST",
-                data: ajaxData,
-                cache: false,
-                success: function(results){
-                    for( var i=0; i <newMarkers.length; i++ ){
-                        newMarkers[i].setMap(null);
-                    }
-                    allMarkers = results;
-                    placeMarkers(results);
-                },
-                error : function (e) {
-                    console.log(e);
-                }
-            });
-        }
 
         $('.geo-location').on("click", function(e) {
             e.preventDefault();
@@ -268,18 +74,6 @@ function heroMap(_latitude,_longitude, element, mapDefaultZoom, mapAutoZoom){
                 console.log('Geo Location is not supported');
             }
         });
-
-        // Geo Location ------------------------------------------------------------------------------------------------
-
-        function success(position) {
-            var center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            map.panTo(center);
-            marker = new google.maps.Marker({
-                position: center,
-                map: map,
-                icon: "assets/img/map-marker.png"
-            });
-        }
 
         // Automatic Geo Location
 
@@ -296,4 +90,215 @@ function heroMap(_latitude,_longitude, element, mapDefaultZoom, mapAutoZoom){
         //console.log("No map element");
     }
 
+}
+
+function placeMarkers(markers){
+
+    var newMarkers = [];
+
+    for ( var i = 0; i < markers.length; i++) {
+
+        var marker;
+        var markerContent = document.createElement('div');
+        var thumbnailImage;
+
+        if( markers[i]["marker_image"] !== undefined ){
+            thumbnailImage = markers[i]["marker_image"];
+        }
+        else {
+            thumbnailImage = "assets/img/items/default.png";
+        }
+
+        markerContent.innerHTML =
+            '<div class="marker" data-id="'+ markers[i]["id"] +'">' +
+            '<img src="assets/img/map-marker.png" alt="">' +
+            '</div>';
+
+        // Latitude, Longitude and Address
+
+        if ( markers[i]["latitude"] && markers[i]["longitude"] && markers[i]["address"] ){
+            renderRichMarker(i,"latitudeLongitude");
+        }
+
+        // Only Address
+
+        else if ( markers[i]["address"] && !markers[i]["latitude"] && !markers[i]["longitude"] ){
+            renderRichMarker(i,"address");
+        }
+
+        // Only Latitude and Longitude
+
+        else if ( markers[i]["latitude"] && markers[i]["longitude"] && !markers[i]["address"] ) {
+            renderRichMarker(i,"latitudeLongitude");
+        }
+
+        // No coordinates
+
+        else {
+            console.log( "No location coordinates");
+        }
+    }
+
+    // Create marker using RichMarker plugin -------------------------------------------------------------------
+
+    function renderRichMarker(i,method){
+        if( method === "latitudeLongitude" ){
+            marker = new RichMarker({
+                position: new google.maps.LatLng( markers[i]["latitude"], markers[i]["longitude"] ),
+                map: map,
+                draggable: false,
+                content: markerContent,
+                flat: true
+            });
+
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    openInfobox( $(this.content.firstChild).attr("data-id"), this, i );
+                    //console.log( $(this.content.firstChild).attr("data-id") );
+                }
+            })(marker, i));
+            newMarkers.push(marker);
+
+        }
+        else if ( method === "address" ){
+            var a = i;
+            var geocoder = new google.maps.Geocoder();
+            var geoOptions = {
+                address: markers[i]["address"]
+            };
+            geocoder.geocode(geoOptions, geocodeCallback(markerContent));
+
+        }
+
+        if ( mapAutoZoom === 1 ){
+            var bounds  = new google.maps.LatLngBounds();
+            for (var i = 0; i < newMarkers.length; i++ ) {
+                bounds.extend(newMarkers[i].getPosition());
+            }
+            map.fitBounds(bounds);
+        }
+
+    }
+
+    // Ajax loading of infobox -------------------------------------------------------------------------------------
+
+    var lastInfobox;
+
+    function openInfobox(id, _this, i){
+        $.ajax({
+            url: "assets/php/infobox.php",
+            dataType: "html",
+            data: { id: id },
+            method: "POST",
+            success: function(results){
+                var infoboxOptions = {
+                    content: results,
+                    disableAutoPan: false,
+                    pixelOffset: new google.maps.Size(-125, -30),
+                    zIndex: null,
+                    alignBottom: true,
+                    boxClass: "infobox-wrapper",
+                    enableEventPropagation: true,
+                    closeBoxMargin: "0px 0px -8px 0px",
+                    closeBoxURL: "assets/img/close-btn.png",
+                    infoBoxClearance: new google.maps.Size(1, 1)
+                };
+
+                if( lastInfobox !== undefined ){
+                    lastInfobox.close();
+                }
+
+                newMarkers[i].infobox = new InfoBox(infoboxOptions);
+                newMarkers[i].infobox.open(map, _this);
+                lastInfobox = newMarkers[i].infobox;
+
+                setTimeout(function(){
+                    $(".item.infobox[data-id="+ id +"]").parent().addClass("show");
+                }, 10);
+
+                google.maps.event.addListener(newMarkers[i].infobox,'closeclick',function(){
+                    $(lastClickedMarker).removeClass("active");
+                });
+            },
+            error : function () {
+                console.log("error");
+            }
+        });
+    }
+
+    // Geocoder callback ---------------------------------------------------------------------------------------
+
+    function geocodeCallback(markerContent) {
+        return function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                marker = new RichMarker({
+                    position: results[0].geometry.location,
+                    map: map,
+                    draggable: false,
+                    content: markerContent,
+                    flat: true
+                });
+                newMarkers.push(marker);
+                if ( mapAutoZoom === 1 ){
+                    var bounds  = new google.maps.LatLngBounds();
+                    for (var i = 0; i < newMarkers.length; i++ ) {
+                        bounds.extend(newMarkers[i].getPosition());
+                    }
+                    map.fitBounds(bounds);
+                }
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        openInfobox( $(this.content.firstChild).attr("data-id"), this, 0 );
+                    }
+                })(marker, i));
+            } else {
+                console.log("Geocode failed " + status);
+            }
+        }
+    }
+
+    // Marker clusters -----------------------------------------------------------------------------------------
+
+    var clusterStyles = [
+        {
+            url: 'assets/img/cluster.png',
+            height: 36,
+            width: 36
+        }
+    ];
+
+    var markerCluster = new MarkerClusterer(map, newMarkers, { styles: clusterStyles, maxZoom: 16, ignoreHidden: true });
+
+}
+
+function loadData(url, newMarkers, ajaxData){
+    $.ajax({
+        url: url,
+        dataType: "json",
+        method: "POST",
+        data: ajaxData,
+        cache: false,
+        success: function(results){
+            for( var i=0; i < newMarkers.length; i++ ){
+                newMarkers[i].setMap(null);
+            }
+            var allMarkers = results;
+            placeMarkers(results);
+        },
+        error : function (e) {
+            console.log(e);
+        }
+    });
+}
+
+// Geo Location ------------------------------------------------------------------------------------------------
+
+function success(position) {
+    var center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    map.panTo(center);
+    marker = new google.maps.Marker({
+        position: center,
+        map: map,
+        icon: "assets/img/map-marker.png"
+    });
 }

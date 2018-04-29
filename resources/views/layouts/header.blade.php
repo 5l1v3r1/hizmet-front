@@ -28,6 +28,12 @@
                     @if( Auth::user()  )
 
                             <li>
+                                <a class=" count-info" href="/messenger">
+                                    <i class="fa fa-bell"></i> Messenger
+                                </a>
+                            </li>
+
+                            <li>
                                 <a class=" count-info" href="#">
                                     <i class="fa fa-bell"></i> Bildirimler
                                 </a>

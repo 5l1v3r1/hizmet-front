@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
@@ -6,8 +6,8 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('./fontawesome-webfont_cdea90bb.eot');
-  src: url('./fontawesome-webfont_162a16fe.eot') format('embedded-opentype'), url('./fontawesome-webfont_cdea90bb.woff2') format('woff2'), url('./fontawesome-webfont_cdea90bb.woff') format('woff'), url('./fontawesome-webfont_cdea90bb.ttf') format('truetype'), url('./fontawesome-webfont_cdea90bb.svg') format('svg');
+  src: url('fontawesome-webfont.eot');
+  src: url('fontawesome-webfont-1.eot') format('embedded-opentype'), url('fontawesome-webfont.txt') format('woff2'), url('fontawesome-webfont.woff') format('woff'), url('fontawesome-webfont.ttf') format('truetype'), url('fontawesome-webfont.svg') format('svg');
   font-weight: normal;
   font-style: normal;
 }

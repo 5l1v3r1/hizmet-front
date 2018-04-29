@@ -15,22 +15,23 @@ $(document).ready(function($) {
         autoComplete(map);
     }
 
-//  Selectize hack for disabling search
-
-    var prevSetup = Selectize.prototype.setup;
-    Selectize.prototype.setup = function () {
-        prevSetup.call(this);
-        this.$control_input.prop('readonly', true);
-    };
-
 //  Selectize
+
+    $("[data-enable-search=true]").each(function(){
+        $(this).selectize({
+            onDropdownOpen: dropdownOpen,
+            onDropdownClose: dropdownClose,
+            allowEmptyOption: false
+        });
+    });
 
     var select = $("select");
     select.selectize({
         onDropdownOpen: dropdownOpen,
         onDropdownClose: dropdownClose,
-        allowEmptyOption: true
+        allowEmptyOption: true,        
     });
+
     function dropdownOpen($dropdown){
         $dropdown.addClass("opening");
     }
@@ -38,34 +39,23 @@ $(document).ready(function($) {
         $dropdown.removeClass("opening");
     }
 
+
 //  Disable inputs in the non-active tab
 
     $(".form-slide:not(.active) input, .form-slide:not(.active) select, .form-slide:not(.active) textarea").prop("disabled", true);
 
 //  Change tab button
 
+
+    $("select.change-tab").each(function(){
+        var _this = $(this);
+        if( $(this).find(".item").attr("data-value") !== "" ){
+            changeTab( _this );
+        }
+    });
+
     $(".change-tab").on("change", function() {
-        var parameters = $(this).data("selectize").items[0];
-        var changeTarget = $("#" + $(this).attr("data-change-tab-target"));
-        var slide = changeTarget.find(".form-slide");
-        if( parameters === "" ){
-            slide.removeClass("active");
-            slide.first().addClass("default");
-            changeTarget.find("input").prop("disabled", true);
-            changeTarget.find("select").prop("disabled", true);
-            changeTarget.find("textarea").prop("disabled", true);
-        }
-        else {
-            slide.removeClass("default");
-            slide.removeClass("active");
-            changeTarget.find("input").prop("disabled", true);
-            changeTarget.find("select").prop("disabled", true);
-            changeTarget.find("textarea").prop("disabled", true);
-            changeTarget.find( "#" + parameters ).addClass("active");
-            changeTarget.find( "#" + parameters + " input").prop("disabled", false);
-            changeTarget.find( "#" + parameters + " textarea").prop("disabled", false);
-            changeTarget.find( "#" + parameters + " select").prop("disabled", false);
-        }
+        changeTab( $(this) );
     });
 
     $(".box").each(function(){
@@ -258,15 +248,67 @@ $(document).ready(function($) {
         });
     });
 
+//  No UI Slider -------------------------------------------------------------------------------------------------------
+
+    if( $('.ui-slider').length > 0 ){
+
+        $.getScript( "assets/js/jquery.nouislider.all.min.js", function() {
+            $('.ui-slider').each(function() {
+                if( $("body").hasClass("rtl") ) var rtl = "rtl";
+                else rtl = "ltr";
+
+                var step;
+                if( $(this).attr('data-step') ) {
+                    step = parseInt( $(this).attr('data-step') );
+                }
+                else {
+                    step = 10;
+                }
+                var sliderElement = $(this).attr('id');
+                var element = $( '#' + sliderElement);
+                var valueMin = parseInt( $(this).attr('data-value-min') );
+                var valueMax = parseInt( $(this).attr('data-value-max') );
+                $(this).noUiSlider({
+                    start: [ valueMin, valueMax ],
+                    connect: true,
+                    direction: rtl,
+                    range: {
+                        'min': valueMin,
+                        'max': valueMax
+                    },
+                    step: step
+                });
+                if( $(this).attr('data-value-type') == 'price' ) {
+                    if( $(this).attr('data-currency-placement') == 'before' ) {
+                        $(this).Link('lower').to( $(this).children('.values').children('.value-min'), null, wNumb({ prefix: $(this).attr('data-currency'), decimals: 0, thousand: '.' }));
+                        $(this).Link('upper').to( $(this).children('.values').children('.value-max'), null, wNumb({ prefix: $(this).attr('data-currency'), decimals: 0, thousand: '.' }));
+                    }
+                    else if( $(this).attr('data-currency-placement') == 'after' ){
+                        $(this).Link('lower').to( $(this).children('.values').children('.value-min'), null, wNumb({ postfix: $(this).attr('data-currency'), decimals: 0, thousand: ' ' }));
+                        $(this).Link('upper').to( $(this).children('.values').children('.value-max'), null, wNumb({ postfix: $(this).attr('data-currency'), decimals: 0, thousand: ' ' }));
+                    }
+                }
+                else {
+                    $(this).Link('lower').to( $(this).children('.values').children('.value-min'), null, wNumb({ decimals: 0 }));
+                    $(this).Link('upper').to( $(this).children('.values').children('.value-max'), null, wNumb({ decimals: 0 }));
+                }
+            });
+        });
+    }
+
 //  Read More
 
     readMore();
 
     footerHeight();
 
+    $("form").each(function(){
+        $(this).validate();
+    });
+
 });
 
-$(window).resize(function(){
+$(window).on("resize", function(){
     clearTimeout(resizeId);
     resizeId = setTimeout(doneResizing, 250);
 });
@@ -281,12 +323,43 @@ function doneResizing(){
     footerHeight();
 }
 
+// Change Tab
+
+function changeTab(_this){
+    var parameters = _this.data("selectize").items[0];
+    var changeTarget = $("#" + _this.attr("data-change-tab-target"));
+    var slide = changeTarget.find(".form-slide");
+    if( parameters === "" ){
+        slide.removeClass("active");
+        slide.first().addClass("default");
+        changeTarget.find("input").prop("disabled", true);
+        changeTarget.find("select").prop("disabled", true);
+        changeTarget.find("textarea").prop("disabled", true);
+    }
+    else {
+        slide.removeClass("default");
+        slide.removeClass("active");
+        changeTarget.find("input").prop("disabled", true);
+        changeTarget.find("select").prop("disabled", true);
+        changeTarget.find("textarea").prop("disabled", true);
+        changeTarget.find( "#" + parameters ).addClass("active");
+        changeTarget.find( "#" + parameters + " input").prop("disabled", false);
+        changeTarget.find( "#" + parameters + " textarea").prop("disabled", false);
+        changeTarget.find( "#" + parameters + " select").prop("disabled", false);
+    }
+}
+
 // Footer Height
 
 function footerHeight(){
-    var footer = $(".footer");
-    var footerHeight = footer.height() + parseInt( footer.css("padding-top"), 10 ) + parseInt( footer.css("padding-bottom"), 10 ) ;
-    $(".page >.content").css("margin-bottom", footerHeight + "px");
+    if( !viewport.is("xs") ) {
+        var footer = $(".footer");
+        var footerHeight = footer.height() + parseInt( footer.css("padding-top"), 10 ) + parseInt( footer.css("padding-bottom"), 10 ) ;
+        $(".page >.content").css("margin-bottom", footerHeight + "px");
+    }
+    else if(viewport.is("xs")) {
+        $(".page >.content").css("margin-bottom", "0px");
+    }
 }
 
 // Read More
@@ -428,7 +501,26 @@ function autoComplete(map, marker){
 
         }
     }
+
 }
+
+/*
+if( $("#input-location2").length ){
+	if( !map ){
+		var map = new google.maps.Map(document.getElementById("input-location2"));
+	}
+	var mapCenter;
+	var input = document.getElementById('input-location2');
+	var autocomplete = new google.maps.places.Autocomplete(input);
+	autocomplete.bindTo('bounds', map);
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		var place = autocomplete.getPlace();
+		if (!place.geometry) {
+			return;
+		}
+	});       
+}
+*/
 
 function previewImage(input) {
     var ext = $(input).val().split('.').pop().toLowerCase();
@@ -445,3 +537,30 @@ function previewImage(input) {
         }
     }
 }
+
+// Viewport ------------------------------------------------------------------------------------------------------------
+
+var viewport = (function() {
+    var viewPorts = ['xs', 'sm', 'md', 'lg'];
+
+    var viewPortSize = function() {
+        return window.getComputedStyle(document.body, ':before').content.replace(/"/g, '');
+    };
+
+    var is = function(size) {
+        if ( viewPorts.indexOf(size) === -1 ) throw "no valid viewport name given";
+        return viewPortSize() === size;
+    };
+
+    var isEqualOrGreaterThan = function(size) {
+        if ( viewPorts.indexOf(size) === -1 ) throw "no valid viewport name given";
+        return viewPorts.indexOf(viewPortSize()) >= viewPorts.indexOf(size);
+    };
+
+    // Public API
+    return {
+        is: is,
+        isEqualOrGreaterThan: isEqualOrGreaterThan
+    }
+
+})();

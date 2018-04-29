@@ -26,7 +26,7 @@
         <section class="block">
             <div class="container">
                 <div class="row flex-column-reverse flex-md-row">
-                    <div class="col-md-12">
+                    <div class="col-md-9">
                         <section class="my-0">
                             <div class="author big">
                                 <div class="author-image">
@@ -165,7 +165,18 @@
                         </section>
                     </div>
                     <!--end col-md-9-->
-
+                    <div class="col-md-3">
+                        <form method="POST" action="/mesaj-gonder" accept-charset="UTF-8" class="form-horizontal">
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <label for="message_2" class="col-form-label">Mesaj Gönder</label>
+                                <textarea name="message_2" id="message_2" class="form-control" rows="4" placeholder=" Hizmet verene mesajınız."></textarea>
+                            </div>
+                            <input type="hidden" name="client_id_2" value="{{$profile_data->id}}">
+                            <!--end form-group-->
+                            <button type="submit" class="btn btn-primary">Gönder</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <!--end container-->

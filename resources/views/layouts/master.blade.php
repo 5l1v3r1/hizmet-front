@@ -92,7 +92,7 @@
                                 </div>
                                 <!--end col-md-3-->
                                 <div class="col-md-4">
-                                    <h2>İletişin</h2>
+                                    <h2>İletişim</h2>
                                     <address>
                                         <figure>
                                             Piri Reis Mh. 1993. SK. Semerkand evleri A Blok no:27 dr:30 Esenyurt / İstanbul
