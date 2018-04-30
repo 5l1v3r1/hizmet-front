@@ -176,6 +176,14 @@
                             <!--end form-group-->
                             <button type="submit" class="btn btn-primary">Gönder</button>
                         </form>
+                        <hr>
+                        <div class="form-group">
+                            @if(empty($favorites))
+                        <a href="http://hizmet.site/favori-ekle/{{$profile_data->id}}" class="btn btn-success btn-rounded">Favorilere Ekle</a>
+                            @else
+                        <a href="http://hizmet.site/favori-sil/{{$profile_data->id}}" class="btn btn-warning btn-rounded">Favorilerden Kaldır</a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

@@ -170,25 +170,26 @@ class RegisterController extends Controller
     }
 
     public function showTeklifler()
-    {    $offer_data = DB::table('booking_offers')
-        ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices','clients.id as cid')
-        ->Join('booking','booking.id','booking_offers.booking_id')
-        ->Join('clients','clients.id','booking_offers.assigned_id')
-        ->Join('services','services.id','booking.service_id')
-        ->where('booking_offers.client_id', Auth::user()->id)
-        ->where('booking_offers.status','<>', 0)
-        ->whereIn('booking_offers.status', [1, 2])
-        ->get();
+    {
+        $offer_data = DB::table('booking_offers')
+            ->select('booking.*', 'clients.name as cname', 'services.s_name as sname', 'clients.province as bas_il', 'clients.district as bas_ilce', 'booking_offers.note as note', 'clients.name as bas_name', 'booking_offers.offer_date as offer_date', 'booking_offers.id as bid', 'booking_offers.status as status', 'booking_offers.prices as prices', 'clients.id as cid')
+            ->Join('booking', 'booking.id', 'booking_offers.booking_id')
+            ->Join('clients', 'clients.id', 'booking_offers.assigned_id')
+            ->Join('services', 'services.id', 'booking.service_id')
+            ->where('booking_offers.client_id', Auth::user()->id)
+            ->where('booking_offers.status', '<>', 0)
+            ->whereIn('booking_offers.status', [1, 2])
+            ->get();
         return view('pages.client.teklifler', ['offer_data' => $offer_data]);
     }
 
     public function showVerilenTeklifler()
     {
         $offer_data = DB::table('booking_offers')
-            ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices')
-            ->Join('booking','booking.id','booking_offers.booking_id')
-            ->Join('clients','clients.id','booking_offers.assigned_id')
-            ->Join('services','services.id','booking.service_id')
+            ->select('booking.*', 'clients.name as cname', 'services.s_name as sname', 'clients.province as bas_il', 'clients.district as bas_ilce', 'booking_offers.note as note', 'clients.name as bas_name', 'booking_offers.offer_date as offer_date', 'booking_offers.id as bid', 'booking_offers.status as status', 'booking_offers.prices as prices')
+            ->Join('booking', 'booking.id', 'booking_offers.booking_id')
+            ->Join('clients', 'clients.id', 'booking_offers.assigned_id')
+            ->Join('services', 'services.id', 'booking.service_id')
             ->where('booking_offers.assigned_id', Auth::user()->id)
             ->where('booking_offers.status', 1)
             ->get();
@@ -198,22 +199,23 @@ class RegisterController extends Controller
     public function showOnaylananTeklifler()
     {
         $offer_data = DB::table('booking_offers')
-            ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices')
-            ->Join('booking','booking.id','booking_offers.booking_id')
-            ->Join('clients','clients.id','booking_offers.assigned_id')
-            ->Join('services','services.id','booking.service_id')
+            ->select('booking.*', 'clients.name as cname', 'services.s_name as sname', 'clients.province as bas_il', 'clients.district as bas_ilce', 'booking_offers.note as note', 'clients.name as bas_name', 'booking_offers.offer_date as offer_date', 'booking_offers.id as bid', 'booking_offers.status as status', 'booking_offers.prices as prices')
+            ->Join('booking', 'booking.id', 'booking_offers.booking_id')
+            ->Join('clients', 'clients.id', 'booking_offers.assigned_id')
+            ->Join('services', 'services.id', 'booking.service_id')
             ->where('booking_offers.assigned_id', Auth::user()->id)
             ->where('booking_offers.status', 2)
             ->get();
         return view('pages.seller.onaylanan_teklifler', ['offer_data' => $offer_data]);
     }
+
     public function showTamamlananTeklifler()
     {
         $offer_data = DB::table('booking_offers')
-            ->select('booking.*','clients.name as cname','services.s_name as sname','clients.province as bas_il','clients.district as bas_ilce','booking_offers.note as note','clients.name as bas_name', 'booking_offers.offer_date as offer_date','booking_offers.id as bid','booking_offers.status as status','booking_offers.prices as prices','clients.id as cid')
-            ->Join('booking','booking.id','booking_offers.booking_id')
-            ->Join('clients','clients.id','booking_offers.assigned_id')
-            ->Join('services','services.id','booking.service_id')
+            ->select('booking.*', 'clients.name as cname', 'services.s_name as sname', 'clients.province as bas_il', 'clients.district as bas_ilce', 'booking_offers.note as note', 'clients.name as bas_name', 'booking_offers.offer_date as offer_date', 'booking_offers.id as bid', 'booking_offers.status as status', 'booking_offers.prices as prices', 'clients.id as cid')
+            ->Join('booking', 'booking.id', 'booking_offers.booking_id')
+            ->Join('clients', 'clients.id', 'booking_offers.assigned_id')
+            ->Join('services', 'services.id', 'booking.service_id')
             ->where('booking_offers.assigned_id', Auth::user()->id)
             ->where('booking_offers.status', 5)
             ->get();
@@ -229,19 +231,19 @@ class RegisterController extends Controller
     {
 
 
-            if ($request->input("new_current_password") == $request->input("repeat_new_current_password")) {
-                DB::table('clients')
-                    ->where('id', $request->input("client_id"))
-                    ->where('status', '<>', 0)
-                    ->update(
-                        [
-                            'password' => bcrypt($request->input("new_current_password")),
+        if ($request->input("new_current_password") == $request->input("repeat_new_current_password")) {
+            DB::table('clients')
+                ->where('id', $request->input("client_id"))
+                ->where('status', '<>', 0)
+                ->update(
+                    [
+                        'password' => bcrypt($request->input("new_current_password")),
 
-                        ]
-                    );
-            } else {
-                return "Girdiğiniz şifreler Eşleşmiyor";
-            }
+                    ]
+                );
+        } else {
+            return "Girdiğiniz şifreler Eşleşmiyor";
+        }
 
 
         return redirect()->back();
@@ -250,18 +252,6 @@ class RegisterController extends Controller
 
     public function changeProfile(Request $request)
     {
-        /* $this->validate(request(), [
-             'name' => 'required',
-             'email' => 'required|email',
-             'password' => 'required'
-         ]);
-
-         // $user = User::create(request(['name', 'email', 'password']));
-         if ($request->input("type") == 1) {
-             $operation = [62];
-         } elseif ($request->input("type") == 2) {
-             $operation = [63];
-         }*/
 
         DB::table('clients')
             ->where('id', $request->input("client_id"))
@@ -293,85 +283,84 @@ class RegisterController extends Controller
     {
 
 
-            DB::table('booking_offers')
-                ->where('id', $id)
-                ->update(
-                    [
-                        'status' =>2,
+        DB::table('booking_offers')
+            ->where('id', $id)
+            ->update(
+                [
+                    'status' => 2,
 
-                    ]
-                );
-            $bo= DB::table("booking_offers")
-                    ->where('id',$id)
-                    ->first();
-                DB::table('booking')
-                    ->where('id', $bo->booking_id)
-                    ->update(
-                        [
-                            'assigned_id' =>Auth::user()->id,
-                            'status'=>2,
+                ]
+            );
+        $bo = DB::table("booking_offers")
+            ->where('id', $id)
+            ->first();
+        DB::table('booking')
+            ->where('id', $bo->booking_id)
+            ->update(
+                [
+                    'assigned_id' => Auth::user()->id,
+                    'status' => 2,
 
-                        ]
-                    );
-
+                ]
+            );
 
 
         return redirect()->back();
     }
+
     public function istamamla(Request $request, $id = 0)
     {
 
 
-            DB::table('booking_offers')
-                ->where('id', $id)
-                ->update(
-                    [
-                        'status' =>5,
+        DB::table('booking_offers')
+            ->where('id', $id)
+            ->update(
+                [
+                    'status' => 5,
 
-                    ]
-                );
-            $bo= DB::table("booking_offers")
-                    ->where('id',$id)
-                    ->first();
-                DB::table('booking')
-                    ->where('id', $bo->booking_id)
-                    ->update(
-                        [
-                            'assigned_id' =>Auth::user()->id,
-                            'status'=>5,
+                ]
+            );
+        $bo = DB::table("booking_offers")
+            ->where('id', $id)
+            ->first();
+        DB::table('booking')
+            ->where('id', $bo->booking_id)
+            ->update(
+                [
+                    'assigned_id' => Auth::user()->id,
+                    'status' => 5,
 
-                        ]
-                    );
+                ]
+            );
 
 
-
-        return redirect()->to('/satici-profil/'.$bo->assigned_id);
+        return redirect()->to('/satici-profil/' . $bo->assigned_id);
     }
-  public function kotu(Request $request, $id = 0)
+
+    public function kotu(Request $request, $id = 0)
     {
 
 
-            DB::table('booking_offers')
-                ->where('id', $id)
-                ->update(
-                    [
-                        'status' =>3,
+        DB::table('booking_offers')
+            ->where('id', $id)
+            ->update(
+                [
+                    'status' => 3,
 
-                    ]
-                );
-            $bo= DB::table("booking_offers")
-                    ->where('id',$id)
-                    ->first();
-                DB::table('booking')
-                    ->where('id', $bo->booking_id)
-                    ->update(
-                        [
-                            'assigned_id' =>Auth::user()->id,
-                            'status'=>3,
+                ]
+            );
+        $bo = DB::table("booking_offers")
+            ->where('id', $id)
+            ->first();
+        DB::table('booking')
+            ->where('id', $bo->booking_id)
+            ->update(
+                [
+                    'assigned_id' => Auth::user()->id,
+                    'status' => 3,
 
-                        ]
-                    );
-
+                ]
+            );
 
 
         return redirect()->back();
@@ -384,25 +373,26 @@ class RegisterController extends Controller
             ->where('id', $id)
             ->update(
                 [
-                    'status' =>3,
+                    'status' => 3,
 
                 ]
             );
-        $bo= DB::table("booking_offers")
-            ->where('id',$id)
+        $bo = DB::table("booking_offers")
+            ->where('id', $id)
             ->first();
         DB::table('booking')
             ->where('id', $bo->booking_id)
             ->update(
                 [
-                    'assigned_id' =>0,
-                    'status' =>1,
+                    'assigned_id' => 0,
+                    'status' => 1,
 
                 ]
             );
 
         return redirect()->back();
     }
+
     public function geri(Request $request, $id = 0)
     {
 
@@ -410,25 +400,26 @@ class RegisterController extends Controller
             ->where('id', $id)
             ->update(
                 [
-                    'status' =>1,
+                    'status' => 1,
 
                 ]
             );
-        $bo= DB::table("booking_offers")
-            ->where('id',$id)
+        $bo = DB::table("booking_offers")
+            ->where('id', $id)
             ->first();
         DB::table('booking')
             ->where('id', $bo->booking_id)
             ->update(
                 [
-                    'assigned_id' =>0,
-                    'status' =>1,
+                    'assigned_id' => 0,
+                    'status' => 1,
 
                 ]
             );
 
         return redirect()->back();
     }
+
     public function tamamla(Request $request, $id = 0)
     {
 
@@ -436,46 +427,55 @@ class RegisterController extends Controller
             ->where('id', $id)
             ->update(
                 [
-                    'status' =>4,
+                    'status' => 4,
 
                 ]
             );
 
         return redirect()->back();
     }
-    public function clientProfile($id=0){
+
+    public function clientProfile($id = 0)
+    {
         $profile_data = DB::table('clients')
             ->where('id', $id)
             ->where('status', '<>', 0)
             ->first();
-        $rate= DB::table('comment')
+        $rate = DB::table('comment')
             ->where('c_id', $id)
             ->avg('point');
         $comment_data = DB::table('comment')
-            ->select('comment.*','clients.name as name')
-            ->join('clients','clients.id','comment.created_by' )
+            ->select('comment.*', 'clients.name as name')
+            ->join('clients', 'clients.id', 'comment.created_by')
             ->where('c_id', $id)
             ->get();
 
-        return view('pages.client.show_profile', ['profile_data' => $profile_data,'rate' => $rate, 'comment_data' => json_encode($comment_data),]);
+        return view('pages.client.show_profile', ['profile_data' => $profile_data, 'rate' => $rate, 'comment_data' => json_encode($comment_data),]);
     }
-    public function sellerProfile($id=0){
+
+    public function sellerProfile($id = 0)
+    {
         $profile_data = DB::table('clients')
             ->where('id', $id)
             ->where('status', '<>', 0)
             ->first();
-        $rate= DB::table('comment')
+        $rate = DB::table('comment')
             ->where('c_id', $id)
             ->avg('point');
         $comment_data = DB::table('comment')
-            ->select('comment.*','clients.name as name')
-            ->join('clients','clients.id','comment.created_by' )
+            ->select('comment.*', 'clients.name as name')
+            ->join('clients', 'clients.id', 'comment.created_by')
             ->where('c_id', $id)
             ->get();
-
-        return view('pages.seller.show_profile', ['profile_data' => $profile_data,'rate' => $rate, 'comment_data' => json_encode($comment_data),]);
+        $favorites=DB::table('client_favorites')
+            ->where('seller_id', $id)
+            ->where('client_id', Auth::user()->id)
+            ->first();
+        return view('pages.seller.show_profile', ['profile_data' => $profile_data, 'rate' => $rate, 'favorites' => $favorites ,'comment_data' => json_encode($comment_data),]);
     }
-    public function clientYorumYaz(Request $request){
+
+    public function clientYorumYaz(Request $request)
+    {
         DB::table('comment')->insert(
             [
                 'c_id' => $request->input("client_id"),
@@ -487,6 +487,35 @@ class RegisterController extends Controller
             ]
         );
 
+        return redirect()->back();
+    }
+
+    public function favori(Request $request){
+
+        $favorite_data = DB::table('client_favorites')
+            ->join('clients', 'clients.id', 'client_favorites.seller_id')
+            ->where('client_favorites.client_id', Auth::user()->id)
+            ->get();
+
+
+        return view('pages.client.favoriler', ['favorite_data' => $favorite_data]);
+    }
+    public function favoriEkle($id=0){
+        DB::table('client_favorites')->insert(
+            [
+                'client_id' => Auth::user()->id,
+                'seller_id' => $id,
+
+            ]
+        );
+        return redirect()->back();
+    }
+    public function favoriSil($id=0){
+
+        DB::table('client_favorites')
+            ->where('seller_id', $id)
+            ->where('client_id', Auth::user()->id)
+            ->delete();
         return redirect()->back();
     }
 }

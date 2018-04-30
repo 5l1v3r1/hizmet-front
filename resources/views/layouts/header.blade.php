@@ -33,11 +33,7 @@
                                 </a>
                             </li>
 
-                            <li>
-                                <a class=" count-info" href="#">
-                                    <i class="fa fa-bell"></i> Bildirimler
-                                </a>
-                            </li>
+
                             <li>
                                 <a href="/profil">
                                     <i class="fa fa-pencil-square-o"></i>Profil
@@ -56,6 +52,7 @@
                                     {{ csrf_field() }}
                                 </form>
                             </li>
+
                     @endif
 
                 </ul>
@@ -82,14 +79,7 @@
                                 <li class="nav-item active has-child">
                                     <a class="nav-link" href="/home">Anasayfa</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/ilanlar">İlanlar</a>
 
-
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="./iletisim">İletişim</a>
-                                </li>
                                 <li class="nav-item">
                                     <a href="./ilan-olustur" class="btn btn-primary text-caps btn-rounded">İlan Oluştur</a>
                                 </li>
@@ -101,12 +91,7 @@
                                 <li class="nav-item active has-child">
                                     <a class="nav-link" href="/home">Anasayfa</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/ilanlar">İlanlar</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="./iletisim">İletişim</a>
-                                </li>
+
                             </ul>
 
                         @endif

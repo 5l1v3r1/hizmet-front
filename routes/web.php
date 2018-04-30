@@ -50,6 +50,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/teklif-red/{id}','RegisterController@red');
     Route::get('/teklif-geri-al/{id}','RegisterController@geri');
     Route::get('/teklif-tamamla/{id}','RegisterController@tamamla');
+    Route::get('/favorilerim/','RegisterController@favori');
+    Route::get('/favori-ekle/{id}','RegisterController@favoriEkle');
+    Route::get('/favori-sil/{id}','RegisterController@favoriSil');
 
 
 });

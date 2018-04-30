@@ -157,8 +157,8 @@
                                     <!--end form-group-->
 
                                     <div class="form-group">
-                                        <label for="message" class="col-form-label">Mesaj</label>
-                                        <textarea name="message" id="message" class="form-control" rows="4" placeholder=" Hizmet verene mesajınız."></textarea>
+                                        <label for="message_2" class="col-form-label">Mesaj</label>
+                                        <textarea name="message_2" id="message_2" class="form-control" rows="4" placeholder=" Hizmet verene mesajınız."></textarea>
                                     </div>
                                             <input type="hidden" name="client_id" value="{{$ads_data->client_id}}">
                                     <!--end form-group-->
