@@ -43,6 +43,17 @@
 
             <!--end Gallery Carousel-->
             <div class="container">
+
+                <section>
+                    <div class="gallery-carousel owl-carousel">
+                        @if(!empty($images))
+                            @foreach($images as $image)
+                        <img src="http://hizmet.site/{{$image->image_adress}}" alt="" data-hash="1">
+                            @endforeach
+                        @endif
+                    </div>
+                </section>
+
                 <div class="row flex-column-reverse flex-md-row">
                     <!--============ Listing Detail =============================================================-->
                     <div class="col-md-8">
@@ -98,7 +109,7 @@
                                     <div class="author">
                                         <div class="author-image">
                                             <div class="background-image">
-                                                <img src="../assets/img/author-01.jpg" alt="" />
+                                                <img src="http://hizmet.site/{{$ads_data->logo}}" alt="" />
                                             </div>
                                         </div>
                                         <!--end author-image-->

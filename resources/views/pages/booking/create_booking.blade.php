@@ -25,7 +25,7 @@
         <section class="block">
             <div class="container">
 
-                <form method="POST" action="/ilan-olustur" accept-charset="UTF-8" class="form-horizontal">
+                <form method="POST" action="/ilan-olustur" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                     {{ csrf_field() }}
                 <section>
                     <h2>İlan Oluştur</h2>
@@ -286,11 +286,11 @@
                 </section>
 
                 <section>
-                    <h2>Gallery</h2>
+                    <h2>Resim Gelerisi</h2>
                     <div class="file-upload-previews"></div>
                     <div class="file-upload">
-                        <input type="file" name="files[]" class="file-upload-input with-preview" multiple="" title="Click to add files" maxlength="10" accept="gif|jpg|png" />
-                        <span><i class="fa fa-plus-circle"></i>Resim Yüklemek İçin Tıklayınız</span>
+                        <input type="file" name="files[]" title="Resim eklemek için tıklayınız" accept="gif|jpg|png" multiple  />
+
                     </div>
                 </section>
 

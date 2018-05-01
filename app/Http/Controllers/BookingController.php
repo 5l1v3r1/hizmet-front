@@ -36,8 +36,16 @@ class BookingController extends Controller
             $finish = $request->input("ot_finish_time");
             $detail = $request->input("ot_detail");
         }
+        $images = array();
 
-       $booking_id= DB::table('booking')->insertGetId(
+        if($files=$request->file('files')){
+            foreach($files as $file){
+                $images[]=$file->move('img/ilan', md5(uniqid()) . $file->getClientOriginalName());
+            }
+        }
+
+
+        $booking_id = DB::table('booking')->insertGetId(
             [
                 'booking_title' => $request->input("booking_title"),
                 'province' => $request->input("city"),
@@ -54,6 +62,17 @@ class BookingController extends Controller
 
             ]
         );
+        foreach ($images as $image){
+
+            DB::table('booking_images')->insert(
+                [
+                    'booking_id' => $booking_id,
+                    'image_adress' => $image,
+                ]
+            );
+        }
+
+
         Helper::fire_event("create",Auth::user(),"booking",$booking_id);
 
         Helper::fire_alert("booking", "create ", $booking_id);
@@ -70,11 +89,19 @@ class BookingController extends Controller
             ->where('id', $id)
             ->where('status', '<>', 0)
             ->first();
+
         return view('pages.booking.edit_booking', ['booking_data' => $booking_data]);
     }
 
     public function edit(Request $request, $id = 0)
     {
+        $images = array();
+
+        if($files=$request->file('files')){
+            foreach($files as $file){
+                $images[]=$file->move('img/ilan', md5(uniqid()) . $file->getClientOriginalName());
+            }
+        }
 
 
         DB::table('booking')
@@ -91,9 +118,21 @@ class BookingController extends Controller
                     'booking_date' => date('Y-m-d', strtotime(str_replace('/', '-', $request->input("tarih")))),
                     'service_start' => $request->input("start_time"),
                     'service_finish' => $request->input("finish_time"),
-                    'detail' => $request->input("datail"),
+                    'detail' => $request->input("detail"),
                 ]
             );
+        DB::table('booking_images')
+            ->where('booking_id',$id)
+            ->delete();
+        foreach ($images as $image){
+
+            DB::table('booking_images')->insert(
+                [
+                    'booking_id' => $id,
+                    'image_adress' => $image,
+                ]
+            );
+        }
 
 
         return redirect()->back();
@@ -174,12 +213,17 @@ class BookingController extends Controller
     public function showDetail(Request $request, $id = 0)
     {
         $ads_data = DB::table('booking')
-            ->select('booking.*','clients.name as cname', 'booking.id as bid', 'clients.phone as phone','clients.email as email')
+            ->select('booking.*','clients.name as cname', 'booking.id as bid', 'clients.phone as phone','clients.email as email','clients.logo as logo')
             ->Join('services','services.id','booking.service_id')
             ->Join('clients','clients.id','booking.client_id')
             ->where('booking.id', $id)
             ->where('booking.status', '<>', 0)
             ->first();
+
+        $images= DB::table('booking')
+            ->Join('booking_images','booking_images.booking_id','booking.id')
+            ->where('booking.id', $id)
+            ->get();
 
         $client_id = DB::table('booking')
             ->where('booking.id', $id)
@@ -189,7 +233,7 @@ class BookingController extends Controller
             ->where('c_id', $client_id->client_id)
             ->avg('point');
 
-        return view('pages.booking.ads_detail', ['ads_data' => $ads_data, 'rate' => $rate]);
+        return view('pages.booking.ads_detail', ['ads_data' => $ads_data, 'rate' => $rate, 'images'=> $images]);
     }
     public function offer(Request $request){
         $assigned_id = Auth::user()->id;

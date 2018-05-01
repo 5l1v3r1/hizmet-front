@@ -25,7 +25,7 @@
         <section class="block">
             <div class="container">
 
-                <form method="POST" action="/ilan-duzenle/{{$booking_data->id}}" accept-charset="UTF-8" class="form-horizontal">
+                <form method="POST" action="/ilan-duzenle/{{$booking_data->id}}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <section>
                         <h2>İlan Oluştur</h2>
@@ -130,17 +130,16 @@
                         </div>
                         <!--end form-group-->
 
-                        <div class="map height-400px" id="map-submit"></div>
+
                         <input name="latitude" type="text" class="form-control" id="latitude" hidden="" />
                         <input name="longitude" type="text" class="form-control" id="longitude" hidden="" />
                     </section>
 
                     <section>
-                        <h2>Gallery</h2>
+                        <h2>Resim</h2>
                         <div class="file-upload-previews"></div>
                         <div class="file-upload">
-                            <input type="file" name="files[]" class="file-upload-input with-preview" multiple="" title="Click to add files" maxlength="10" accept="gif|jpg|png" />
-                            <span><i class="fa fa-plus-circle"></i>Resim Yüklemek İçin Tıklayınız</span>
+                            <input type="file" name="files[]" multiple accept="gif|jpg|png" />
                         </div>
                     </section>
 
@@ -150,6 +149,7 @@
                         </div>
                     </section>
                 </form>
+                <div class="map height-400px" id="map-submit"></div>
                 <!--end form-submit-->
             </div>
             <!--end container-->

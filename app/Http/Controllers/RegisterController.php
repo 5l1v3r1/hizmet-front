@@ -8,6 +8,8 @@ use App\Helpers\Helper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 class RegisterController extends Controller
 {
@@ -262,6 +264,16 @@ class RegisterController extends Controller
     public function changeProfile(Request $request)
     {
 
+        if($request->hasFile('user_image')){
+
+            $file=$request->file('user_image');
+            $logo= $file->move('img/avatar/client',md5(uniqid()).$file->getClientOriginalName());
+
+
+        }
+
+
+
         DB::table('clients')
             ->where('id', $request->input("client_id"))
             ->where('status', '<>', 0)
@@ -274,6 +286,7 @@ class RegisterController extends Controller
                     'phone' => $request->input("telefon"),
                     'birthday' => $request->input("birthday"),
                     'about_us' => $request->input("about"),
+                    'logo' => $logo,
                 ]
             );
         DB::table('client_social')
@@ -480,7 +493,7 @@ class RegisterController extends Controller
             ->where('c_id', $id)
             ->avg('point');
         $comment_data = DB::table('comment')
-            ->select('comment.*', 'clients.name as name')
+            ->select('comment.*', 'clients.name as name','clients.logo as logo')
             ->join('clients', 'clients.id', 'comment.created_by')
             ->where('c_id', $id)
             ->get();
@@ -498,7 +511,7 @@ class RegisterController extends Controller
             ->where('c_id', $id)
             ->avg('point');
         $comment_data = DB::table('comment')
-            ->select('comment.*', 'clients.name as name')
+            ->select('comment.*', 'clients.name as name','clients.logo as logo')
             ->join('clients', 'clients.id', 'comment.created_by')
             ->where('c_id', $id)
             ->get();

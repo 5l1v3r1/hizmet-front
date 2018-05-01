@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="http://hizmet.site/assets/css/selectize.css" type="text/css" />
     <link rel="stylesheet" href="http://hizmet.site/assets/css/style.css" />
     <link rel="stylesheet" href="http://hizmet.site/assets/css/user.css" />
+    <link rel="stylesheet" href="http://hizmet.site/assets/css/owl.carousel.min.css" type="text/css">
     @yield('page_level_css')
 
     <script>
@@ -135,6 +136,7 @@
     <script src="http://hizmet.site/assets/js/icheck.min.js"></script>
     <script src="http://hizmet.site/assets/js/jquery.validate.min.js"></script>
     <script src="http://hizmet.site/assets/js/custom.js"></script>
+    <script src="http://hizmet.site/assets/js/owl.carousel.min.js"></script>
 
     <!-- Page level javascript -->
     @yield('page_level_js')

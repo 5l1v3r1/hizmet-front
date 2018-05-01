@@ -12,7 +12,7 @@ class MessageController extends Controller
 {
     public function show(){
         $message_data = DB::table('messages')
-            ->select('messages.*','clients.name as name')
+            ->select('messages.*','clients.name as name','clients.logo as logo')
             ->join('clients','clients.id','messages.from_id')
             ->where('to_id', Auth::user()->id)
             ->orwhere('from_id', Auth::user()->id)

@@ -86,7 +86,7 @@
                     </div>
                     <!--end col-md-3-->
                     <div class="col-md-9">
-                        <form method="POST" action="/profil-duzenle" accept-charset="UTF-8" class="form-horizontal">
+                        <form method="POST" action="/profil-duzenle" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-8">
@@ -192,7 +192,7 @@
                                 <div class="col-md-4">
                                     <div class="profile-image">
                                         <div class="image background-image">
-                                            <img src="./assets/img/author-09.jpg" alt=""/>
+                                            <img src="{{$profile_data->logo}}" alt=""/>
                                         </div>
                                         <div class="single-file-input">
                                             <input type="file" id="user_image" name="user_image"/>

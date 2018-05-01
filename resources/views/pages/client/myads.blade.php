@@ -116,8 +116,19 @@
 
                                         </h3>
                                         <a href="./ilan/{{$one->id}}" class="image-wrapper background-image">
-                                            <img src="./assets/img/image-01.jpg" alt=""/>
+                                            <?php
+                                            $image = DB::table('booking')
+                                                ->Join('booking_images','booking_images.booking_id','booking.id')
+                                                ->where('booking.id',$one->id)
+                                                ->first();
+                                            ?>
+                                            @if(!empty($image->image_adress))
+                                                <img src="http://hizmet.site/{{$image->image_adress}}" alt="" />
+                                            @else
+                                                <img src="./assets/img/image-01.jpg" alt="" />
+                                            @endif
                                         </a>
+
                                     </div>
                                     <!--end image-->
                                     <h4 class="location">

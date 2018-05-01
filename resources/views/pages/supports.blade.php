@@ -69,11 +69,11 @@
                             <div class="messaging__header">
                                 <div class="float-left flex-row-reverse messaging__person">
                                     <h5 class="font-weight-bold" id="kisi"></h5>
-                                    <figure class="mr-4 messaging__image-person" data-background-image="assets/img/author-02.jpg"></figure>
+
                                 </div>
                                 <div class="float-right messaging__person">
                                     <h5 class="mr-4">Sen</h5>
-                                    <figure id="messaging__user" class="messaging__image-person" data-background-image="assets/img/author-06.jpg"></figure>
+
                                 </div>
                             </div>
                             <div class="messaging__content" data-background-color="rgba(0,0,0,.05)">

@@ -50,7 +50,12 @@
                                     <a href="http://hizmet.site/satici-profil/{{$one->seller_id}}" class="title">{{$one->name}}</a>
                                 </h3>
                                 <a href="http://hizmet.site/satici-profil/{{$one->seller_id}}" class="image-wrapper background-image">
-                                    <img src="http://hizmet.site/assets/img/author-02.jpg" alt="">
+
+                                    @if(!empty($one->logo))
+                                        <img src="http://hizmet.site/{{$one->logo}}" alt="" />
+                                    @else
+                                        <img src="http://hizmet.site/assets/img/author-02.jpg" alt="" />
+                                    @endif
                                 </a>
                             </div>
                             <!--end image-->

@@ -31,7 +31,11 @@
                             <div class="author big">
                                 <div class="author-image">
                                     <div class="background-image">
-                                        <img src="{{url('/assets/img/author-09.jpg')}}" alt="" />
+                                        @if(!empty($profile_data->logo))
+                                            <img src="http://hizmet.site/{{$profile_data->logo}}" alt="" />
+                                        @else
+                                            <img src="http://hizmet.site/assets/img/author-06.jpg" alt="" />
+                                        @endif
                                     </div>
                                 </div>
                                 <!--end author-image-->
@@ -135,7 +139,11 @@
                                     <div class="author">
                                         <a href="#" class="author-image">
                                             <div class="background-image">
-                                                <img src="../../assets/img/author-09.jpg" alt="" />
+                                                @if(!empty($one->logo))
+                                                    <img src="http://hizmet.site/{{$one->logo}}" alt="" />
+                                                @else
+                                                    <img src="http://hizmet.site/assets/img/author-09.jpg" alt="" />
+                                                @endif
                                             </div>
                                         </a>
                                         <div class="author-description">
