@@ -46,6 +46,15 @@
                                 <a class="nav-link icon" href="./sifre-degistir">
                                     <i class="fa fa-recycle"></i>Şifre Değiştir
                                 </a>
+                                <a class="nav-link icon" href="./favorilerim">
+                                    <i class="fa fa-recycle"></i>Favorilerim
+                                </a>
+                            <hr>
+                                <a class="nav-link icon" href="./talep-olustur">
+                                    <i class="fa fa-recycle"></i>Destek Talebi Oluştur
+                                </a> <a class="nav-link icon" href="./taleplerim">
+                                    <i class="fa fa-recycle"></i>Destek Taleplerim
+                                </a>
                             @endif
                             @if(Auth::user()->type==2)
                                 <a class="nav-link icon active" href="./profil">
@@ -63,6 +72,12 @@
                                 <a class="nav-link icon" href="./sifre-degistir">
                                     <i class="fa fa-recycle"></i>Şifre Değiştir
                                 </a>
+                                    <hr>
+                                    <a class="nav-link icon" href="./talep-olustur">
+                                        <i class="fa fa-recycle"></i>Destek Talebi Oluştur
+                                    </a> <a class="nav-link icon" href="./taleplerim">
+                                        <i class="fa fa-recycle"></i>Destek Taleplerim
+                                    </a>
                             @endif
                         </nav>
                     </div>

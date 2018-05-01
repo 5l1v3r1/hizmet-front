@@ -587,6 +587,37 @@ class Helper
             ]
         );
 
+    }public static function fire_event2($event_type,$the_user,$table_name="",$affected_id=0){
+
+        if($event_type == "login" || $event_type == "logout"){
+
+            $table_name = "clients";
+            $affected_id = $the_user->id;
+        }
+
+        $result = DB::table('event_logs')->insert(
+            [
+                'user_id' => $the_user->id,
+                'table_name' => $table_name,
+                'event_type' => $event_type,
+                'affected_id' => $affected_id
+            ]
+        );
+
+    }
+    public static function fire_alert($event_type, $sub_type, $device){
+
+
+
+        $result = DB::table('alerts')->insert(
+            [
+                'type' => $event_type,
+                'sub_type' => $sub_type,
+                'device_id' => $device,
+                'status' => 1,
+            ]
+        );
+
     }
 
     /**

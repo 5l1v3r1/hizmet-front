@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -45,6 +46,14 @@ class RegisterController extends Controller
             [
                 'c_id' => $client_id,
 
+            ]
+        );
+        DB::table('event_logs')->insert(
+            [
+                'user_id' => 1,
+                'table_name' => "clients",
+                'event_type' => "create",
+                'affected_id' => $client_id
             ]
         );
 
@@ -275,6 +284,10 @@ class RegisterController extends Controller
                     'twitter' => $request->input("twitter"),
                 ]
             );
+        Helper::fire_event("update",Auth::user(),"clients",$request->input("client_id"));
+
+        Helper::fire_alert("clients", "update ", $request->input("client_id"));
+
 
         return redirect()->back();
     }
@@ -289,6 +302,7 @@ class RegisterController extends Controller
                 [
                     'status' => 2,
 
+
                 ]
             );
         $bo = DB::table("booking_offers")
@@ -300,9 +314,14 @@ class RegisterController extends Controller
                 [
                     'assigned_id' => Auth::user()->id,
                     'status' => 2,
+                    'order_date' =>  date('Y-m-d G:i:s ',time()),
 
                 ]
             );
+        Helper::fire_event("onay",Auth::user(),"offers",$id);
+
+        Helper::fire_alert("offers", "onay ", $id);
+
 
 
         return redirect()->back();
@@ -332,6 +351,9 @@ class RegisterController extends Controller
 
                 ]
             );
+        Helper::fire_event("finish",Auth::user(),"order",$bo->booking_id);
+
+        Helper::fire_alert("order", "finish ", $bo->booking_id);
 
 
         return redirect()->to('/satici-profil/' . $bo->assigned_id);
@@ -361,6 +383,9 @@ class RegisterController extends Controller
 
                 ]
             );
+        Helper::fire_event("bad",Auth::user(),"order",$bo->booking_id);
+
+        Helper::fire_alert("order", "bad ", $bo->booking_id);
 
 
         return redirect()->back();
@@ -387,9 +412,12 @@ class RegisterController extends Controller
                     'assigned_id' => 0,
                     'status' => 1,
 
+
                 ]
             );
+        Helper::fire_event("red",Auth::user(),"offers",$bo->booking_id);
 
+        Helper::fire_alert("offers", "red ", $bo->booking_id);
         return redirect()->back();
     }
 
@@ -413,9 +441,13 @@ class RegisterController extends Controller
                 [
                     'assigned_id' => 0,
                     'status' => 1,
+                    'order_date' =>  null,
 
                 ]
             );
+        Helper::fire_event("cancel",Auth::user(),"order",$id);
+
+        Helper::fire_alert("order", "cancel ", $id);
 
         return redirect()->back();
     }
@@ -431,6 +463,9 @@ class RegisterController extends Controller
 
                 ]
             );
+        Helper::fire_event("finish",Auth::user(),"offers",$id);
+
+        Helper::fire_alert("offers", "finish ", $id);
 
         return redirect()->back();
     }
@@ -467,11 +502,11 @@ class RegisterController extends Controller
             ->join('clients', 'clients.id', 'comment.created_by')
             ->where('c_id', $id)
             ->get();
-        $favorites=DB::table('client_favorites')
+        $favorites = DB::table('client_favorites')
             ->where('seller_id', $id)
             ->where('client_id', Auth::user()->id)
             ->first();
-        return view('pages.seller.show_profile', ['profile_data' => $profile_data, 'rate' => $rate, 'favorites' => $favorites ,'comment_data' => json_encode($comment_data),]);
+        return view('pages.seller.show_profile', ['profile_data' => $profile_data, 'rate' => $rate, 'favorites' => $favorites, 'comment_data' => json_encode($comment_data),]);
     }
 
     public function clientYorumYaz(Request $request)
@@ -490,7 +525,8 @@ class RegisterController extends Controller
         return redirect()->back();
     }
 
-    public function favori(Request $request){
+    public function favori(Request $request)
+    {
 
         $favorite_data = DB::table('client_favorites')
             ->join('clients', 'clients.id', 'client_favorites.seller_id')
@@ -500,7 +536,9 @@ class RegisterController extends Controller
 
         return view('pages.client.favoriler', ['favorite_data' => $favorite_data]);
     }
-    public function favoriEkle($id=0){
+
+    public function favoriEkle($id = 0)
+    {
         DB::table('client_favorites')->insert(
             [
                 'client_id' => Auth::user()->id,
@@ -510,7 +548,9 @@ class RegisterController extends Controller
         );
         return redirect()->back();
     }
-    public function favoriSil($id=0){
+
+    public function favoriSil($id = 0)
+    {
 
         DB::table('client_favorites')
             ->where('seller_id', $id)
@@ -518,4 +558,72 @@ class RegisterController extends Controller
             ->delete();
         return redirect()->back();
     }
+    public function taleplerim(){
+
+        $support_data = DB::table('support')
+            ->select('*','clients.name as cname', 'support.updated_at as supdated_at','users.name as uname','support.id as sid')
+            ->join('clients', 'clients.id', 'support.created_by')
+            ->Leftjoin('users', 'users.id', 'support.interested')
+            ->where('support.created_by', Auth::user()->id)
+            ->where('support.status', '<>', 0)
+            ->get();
+
+
+        return view('pages.supports', ['support_data' => $support_data]);
+    }
+
+    public function talepolustur(){
+        return view('pages.create_support');
+    }
+    public function getSupport(Request $request){
+        $data= $request->input('data');
+        $support_detail = DB::table('support')
+            ->select('support.*','support_content.*','clients.name as cname','users.name as uname', 'support_content.created_at as sc_time')
+            ->join('support_content','support_content.s_id','support.id')
+            ->join('clients','clients.id','support.created_by')
+            ->join('users','users.id','support.interested')
+            ->where('support.id', $data)
+            ->get();
+        print_r(json_encode($support_detail)) ;
+    }
+    public function sendSupport(Request $request)
+    {
+
+        if ($request->input('data')) {
+            $data = json_decode($request->input('data'));
+            DB::table('support_content')->insert(
+                [
+                    's_id' => $data->support_id,
+                    'user_id' => $data->client_id,
+                    'content' => $data->message,
+                    'message_type'=> 1,
+
+                ]
+            );
+            return $data->support_id;
+
+
+        } else {
+            $supportid = DB::table('support')->insertGetId(
+                [
+                    'created_by' => Auth::user()->id,
+                    'subject' => $request->input("subject"),
+                    'category_id' => $request->input('category'),
+                    'status' => 1,
+                ]
+            );
+            DB::table('support_content')->insert(
+                [
+                    's_id' => $supportid,
+                    'user_id' => Auth::user()->id,
+                    'content' => $request->input("content"),
+                    'message_type' => 1,
+
+                ]
+            );
+            return redirect()->back();
+        }
+    }
+
+
 }

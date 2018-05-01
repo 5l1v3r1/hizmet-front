@@ -32,7 +32,9 @@ class MessageController extends Controller
             ->get();
         print_r(json_encode($message_detail)) ;
     }
-    public function sendMessage(Request $request){
+    public function sendMessage(Request $request)
+    {
+
 
         if($request->input('data')){
             $data = json_decode($request->input('data'));
@@ -48,22 +50,22 @@ class MessageController extends Controller
 
 
         }else{
-        $messaheid=DB::table('messages')->insertGetId(
-            [
-                'from_id' => Auth::user()->id,
-                'to_id' => $request->input("client_id_2"),
-            ]
-        );
-        DB::table('message_content')->insert(
-            [
-                'm_id' => $messaheid,
-                'created_by' => Auth::user()->id,
-                'content' => $request->input("message_2"),
+            $messaheid=DB::table('messages')->insertGetId(
+                [
+                    'from_id' => Auth::user()->id,
+                    'to_id' => $request->input("client_id_2"),
+                ]
+            );
+            DB::table('message_content')->insert(
+                [
+                    'm_id' => $messaheid,
+                    'created_by' => Auth::user()->id,
+                    'content' => $request->input("message_2"),
 
-            ]
-        );
-        return redirect()->back();
-      }
+                ]
+            );
+            return redirect()->back();
+        }
     }
 
 }

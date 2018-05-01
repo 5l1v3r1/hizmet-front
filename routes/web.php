@@ -53,6 +53,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/favorilerim/','RegisterController@favori');
     Route::get('/favori-ekle/{id}','RegisterController@favoriEkle');
     Route::get('/favori-sil/{id}','RegisterController@favoriSil');
+    Route::get('/taleplerim','RegisterController@taleplerim');
+    Route::get('/talep-olustur','RegisterController@talepolustur');
+    Route::post('/getsupport','RegisterController@getSupport');
+    Route::post('/sendsupport','RegisterController@sendSupport');
 
 
 });

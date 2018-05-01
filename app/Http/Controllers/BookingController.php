@@ -37,7 +37,7 @@ class BookingController extends Controller
             $detail = $request->input("ot_detail");
         }
 
-        DB::table('booking')->insert(
+       $booking_id= DB::table('booking')->insertGetId(
             [
                 'booking_title' => $request->input("booking_title"),
                 'province' => $request->input("city"),
@@ -54,6 +54,11 @@ class BookingController extends Controller
 
             ]
         );
+        Helper::fire_event("create",Auth::user(),"booking",$booking_id);
+
+        Helper::fire_alert("booking", "create ", $booking_id);
+
+
 
 
         return redirect()->to('/ilanlarim');
@@ -190,7 +195,7 @@ class BookingController extends Controller
         $assigned_id = Auth::user()->id;
 
 
-        DB::table('booking_offers')->insert(
+        $getid=DB::table('booking_offers')->insertGetId(
             [
                 'client_id' => $request->input("client_id"),
                 'booking_id' => $request->input("booking_id"),
@@ -199,6 +204,10 @@ class BookingController extends Controller
                 'assigned_id' => $assigned_id,
             ]
         );
+        Helper::fire_event("create",Auth::user(),"offers",$getid);
+
+        Helper::fire_alert("offers", "create ", $getid);
+
         return redirect()->back();
     }
 
